@@ -105,24 +105,24 @@ class AlignmentCardPage extends StatelessWidget {
       ];
 
   static Widget _box(String t, Color c) => Container(
-        width: 64,
-        height: 44,
+        width: 60,
+        height: 40,
         alignment: Alignment.center,
         color: c,
         child: Text(t, style: const TextStyle(color: Colors.white, fontSize: 18)),
       );
 
   static Widget _scene(String label, Widget demo) => Padding(
-        padding: const EdgeInsets.only(bottom: 14),
+        padding: const EdgeInsets.only(bottom: 8),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(label,
                 style: const TextStyle(fontSize: 13, fontWeight: FontWeight.w600)),
-            const SizedBox(height: 6),
+            const SizedBox(height: 5),
             Container(
               width: double.infinity,
-              padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 6),
+              padding: const EdgeInsets.symmetric(vertical: 6, horizontal: 6),
               decoration: BoxDecoration(
                 border: Border.all(color: Colors.grey),
                 borderRadius: BorderRadius.circular(8),
