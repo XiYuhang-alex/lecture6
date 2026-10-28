@@ -17,7 +17,8 @@ class ProfileCardApp extends StatelessWidget {
 }
 
 /// 个人名片页：Scaffold + Column 骨架。
-/// 步骤二：容器美化（圆角、阴影、留白）+ 头像在线徽标（Stack + Positioned）。
+/// 步骤三：设计稿对照验收——结构、间距、层级核对通过；
+/// 去掉/恢复 Expanded 实验完成，运行无 RenderFlex 溢出告警。
 class ProfileCardPage extends StatelessWidget {
   const ProfileCardPage({super.key});
 
