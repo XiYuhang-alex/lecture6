@@ -17,7 +17,7 @@ class ProfileCardApp extends StatelessWidget {
 }
 
 /// 个人名片页：Scaffold + Column 骨架。
-/// 步骤一：只管结构与对齐，不做装饰。
+/// 步骤二：容器美化（圆角、阴影、留白）+ 头像在线徽标（Stack + Positioned）。
 class ProfileCardPage extends StatelessWidget {
   const ProfileCardPage({super.key});
 
@@ -26,65 +26,104 @@ class ProfileCardPage extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(title: const Text('个人名片页'), centerTitle: true),
       body: Center(
-        // 卡片固定宽度，居中显示
         child: SizedBox(
-          width: 340,
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              // 1. 头像区
-              const CircleAvatar(
-                radius: 44,
-                backgroundImage: AssetImage('assets/images/avatar.jpg'),
-              ),
-              const SizedBox(height: 12),
-              // 2. 姓名与签名（两行 Text）
-              const Text(
-                'Alex Xi',
-                style: TextStyle(
-                  fontSize: 22,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.black87,
+          width: 360,
+          // 整体卡片容器：圆角 + 阴影 + 留白
+          child: Container(
+            padding: const EdgeInsets.all(24),
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(16),
+              boxShadow: const [
+                BoxShadow(
+                  color: Colors.black12,
+                  blurRadius: 8,
+                  offset: Offset(0, 2),
                 ),
-              ),
-              const SizedBox(height: 4),
-              const Text(
-                'Flutter 初学者 · 正在攻克布局系统',
-                style: TextStyle(fontSize: 14, color: Colors.black54),
-              ),
-              const SizedBox(height: 16),
-              // 3. 统计条：三个 Expanded 数字块，按比例平分宽度
-              Row(
-                children: [
-                  _statBlock('128', '动力'),
-                  _statBlock('256', '好友'),
-                  _statBlock('1024', '获赞'),
-                ],
-              ),
-              const SizedBox(height: 16),
-              // 4. 标签云：Wrap 按行流动排列
-              Wrap(
-                spacing: 8,
-                runSpacing: 8,
-                alignment: WrapAlignment.center,
-                children: const [
-                  Chip(
-                    label: Text('Flutter'),
-                    backgroundColor: Color(0xFFE8EAF6),
+              ],
+            ),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                // 1. 头像区：Stack 层叠出右下角在线徽标
+                Stack(
+                  children: [
+                    const CircleAvatar(
+                      radius: 44,
+                      backgroundImage: AssetImage('assets/images/avatar.jpg'),
+                    ),
+                    // 非定位子组件决定 Stack 尺寸，Positioned 徽标覆盖在右下角
+                    Positioned(
+                      right: 2,
+                      bottom: 2,
+                      child: Container(
+                        width: 16,
+                        height: 16,
+                        decoration: BoxDecoration(
+                          color: Colors.green,
+                          shape: BoxShape.circle,
+                          border: Border.all(color: Colors.white, width: 2),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 12),
+                // 2. 姓名与签名（两行 Text）
+                const Text(
+                  'Alex Xi',
+                  style: TextStyle(
+                    fontSize: 22,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.black87,
                   ),
-                  Chip(label: Text('Dart'), backgroundColor: Color(0xFFE8F5E9)),
-                  Chip(
-                    label: Text('基础组件'),
-                    backgroundColor: Color(0xFFFFF8E1),
+                ),
+                const SizedBox(height: 4),
+                const Text(
+                  'Flutter 初学者 · 正在攻克布局系统',
+                  style: TextStyle(fontSize: 14, color: Colors.black54),
+                ),
+                const SizedBox(height: 16),
+                // 3. 统计条：Container 装饰 + 三个 Expanded 数字块
+                Container(
+                  padding: const EdgeInsets.symmetric(vertical: 12),
+                  decoration: BoxDecoration(
+                    color: const Color(0xFFF3F4FA),
+                    borderRadius: BorderRadius.circular(12),
                   ),
-                  Chip(
-                    label: Text('布局系统'),
-                    backgroundColor: Color(0xFFFCE4EC),
+                  child: Row(
+                    children: [
+                      _statBlock('128', '动力'),
+                      _statBlock('256', '好友'),
+                      _statBlock('1024', '获赞'),
+                    ],
                   ),
-                ],
-              ),
-            ],
+                ),
+                const SizedBox(height: 16),
+                // 4. 标签云：Wrap 按行流动排列
+                Wrap(
+                  spacing: 8,
+                  runSpacing: 8,
+                  alignment: WrapAlignment.center,
+                  children: const [
+                    Chip(
+                      label: Text('Flutter'),
+                      backgroundColor: Color(0xFFE8EAF6),
+                    ),
+                    Chip(label: Text('Dart'), backgroundColor: Color(0xFFE8F5E9)),
+                    Chip(
+                      label: Text('基础组件'),
+                      backgroundColor: Color(0xFFFFF8E1),
+                    ),
+                    Chip(
+                      label: Text('布局系统'),
+                      backgroundColor: Color(0xFFFCE4EC),
+                    ),
+                  ],
+                ),
+              ],
+            ),
           ),
         ),
       ),
