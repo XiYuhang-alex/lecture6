@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+﻿import 'package:flutter/material.dart';
 
 /// 独立研究：约束传递 / FittedBox 缩放策略 / ClipPath 自定义剪裁。
 /// 通过 URL 参数 ?page=N 直接打开对应实验（1约束 / 2缩放 / 3剪裁）。
@@ -200,7 +200,7 @@ class FittedBoxPage extends StatelessWidget {
         _case('对照：长文本不套 FittedBox → 子项报告尺寸超出约束，溢出黄黑警告',
             Container(
               width: 260,
-              height: 70,
+              height: 62,
               color: Colors.blueGrey,
               alignment: Alignment.center,
               child: Row(children: [longText]),
@@ -214,7 +214,7 @@ class FittedBoxPage extends StatelessWidget {
         _case('放得下的短内容 + contain → 被放大占满容器',
             Container(
               width: 260,
-              height: 70,
+              height: 62,
               color: Colors.purple,
               alignment: Alignment.center,
               child: const FittedBox(fit: BoxFit.contain, child: shortText),
@@ -222,7 +222,7 @@ class FittedBoxPage extends StatelessWidget {
         _case('放得下的短内容 + scaleDown → 保持原尺寸，绝不放大',
             Container(
               width: 260,
-              height: 70,
+              height: 62,
               color: Colors.brown,
               alignment: Alignment.center,
               child: const FittedBox(fit: BoxFit.scaleDown, child: shortText),
@@ -249,19 +249,19 @@ class FittedBoxPage extends StatelessWidget {
 
   static Widget _fitDemo(BoxFit fit, Color color, Widget child) => Container(
         width: 260,
-        height: 70,
+        height: 62,
         color: color,
         alignment: Alignment.center,
         child: FittedBox(fit: fit, child: child),
       );
 
   static Widget _case(String label, Widget demo) => Padding(
-        padding: const EdgeInsets.only(bottom: 14),
+        padding: const EdgeInsets.only(bottom: 8),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(label, style: const TextStyle(fontSize: 13, fontWeight: FontWeight.w600)),
-            const SizedBox(height: 6),
+            const SizedBox(height: 5),
             Center(child: demo),
           ],
         ),
