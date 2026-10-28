@@ -183,55 +183,49 @@ class ConstraintPage extends StatelessWidget {
 class FittedBoxPage extends StatelessWidget {
   const FittedBoxPage({super.key});
 
+  // 单行长文本（softWrap:false），固有宽度约 500px，远超 260px 容器
+  static const longText = Text(
+    'FittedBox 缩放实验：这一行内容比容器宽',
+    softWrap: false,
+    style: TextStyle(fontSize: 20, color: Colors.white),
+  );
+  static const shortText = Text('放得下',
+      style: TextStyle(fontSize: 20, color: Colors.white));
+
   @override
   Widget build(BuildContext context) {
-    const content = Text(
-      'FittedBox 缩放实验：这一行内容比容器宽',
-      style: TextStyle(fontSize: 20, color: Colors.white),
-    );
     return ListView(
       padding: const EdgeInsets.all(16),
       children: [
-        _case('对照：不套 FittedBox → 内容直接溢出黄黑警告',
+        _case('对照：长文本不套 FittedBox → 子项报告尺寸超出约束，溢出黄黑警告',
             Container(
               width: 260,
               height: 70,
               color: Colors.blueGrey,
               alignment: Alignment.center,
-              child: content,
+              child: Row(children: [longText]),
             )),
-        _case('fit: BoxFit.contain → 等比缩小，完整显示（上下留边）',
-            FittedBox(
-              fit: BoxFit.contain,
-              child: Container(
-                width: 260,
-                height: 70,
-                color: Colors.indigo,
-                alignment: Alignment.center,
-                child: content,
-              ),
+        _case('fit: BoxFit.contain → 等比缩小到恰好装进容器（上下留边），内容小时还会放大',
+            _fitDemo(BoxFit.contain, Colors.indigo, longText)),
+        _case('fit: BoxFit.fill → 横纵各自缩放强行填满，文字明显变形',
+            _fitDemo(BoxFit.fill, Colors.teal, longText)),
+        _case('fit: BoxFit.scaleDown → 放不下时等比缩小（本例与 contain 等效），放得下时不放大',
+            _fitDemo(BoxFit.scaleDown, Colors.orange, longText)),
+        _case('放得下的短内容 + contain → 被放大占满容器',
+            Container(
+              width: 260,
+              height: 70,
+              color: Colors.purple,
+              alignment: Alignment.center,
+              child: const FittedBox(fit: BoxFit.contain, child: shortText),
             )),
-        _case('fit: BoxFit.fill → 拉伸填满，比例失真（文字变扁）',
-            FittedBox(
-              fit: BoxFit.fill,
-              child: Container(
-                width: 260,
-                height: 70,
-                color: Colors.teal,
-                alignment: Alignment.center,
-                child: content,
-              ),
-            )),
-        _case('fit: BoxFit.scaleDown → 只在放不下时等比缩小，放得下就保持原尺寸',
-            FittedBox(
-              fit: BoxFit.scaleDown,
-              child: Container(
-                width: 260,
-                height: 70,
-                color: Colors.orange,
-                alignment: Alignment.center,
-                child: content,
-              ),
+        _case('放得下的短内容 + scaleDown → 保持原尺寸，绝不放大',
+            Container(
+              width: 260,
+              height: 70,
+              color: Colors.brown,
+              alignment: Alignment.center,
+              child: const FittedBox(fit: BoxFit.scaleDown, child: shortText),
             )),
         const SizedBox(height: 12),
         Container(
@@ -242,9 +236,9 @@ class FittedBoxPage extends StatelessWidget {
           ),
           child: const Text(
             '选型结论：\n'
-            '① 默认能放下时，scaleDown 与 contain 外观一致（都按原比例）；\n'
-            '② contain 允许放大（内容小于容器时会放大占满），scaleDown 永不放大；\n'
-            '③ fill 会改变宽高比，文字会变形，除非明确需要铺满否则不用；\n'
+            '① 内容放不下时，contain 与 scaleDown 表现一致（等比缩小，不变形）；\n'
+            '② 内容放得下时，contain 会放大占满容器，scaleDown 保持原尺寸；\n'
+            '③ fill 横纵独立缩放会破坏宽高比，文字变形，除非明确要铺满否则不用；\n'
             '④ 容错兜底优先 scaleDown：既避免溢出，又不破坏原有视觉比例。',
             style: TextStyle(fontSize: 13, height: 1.5),
           ),
@@ -252,6 +246,14 @@ class FittedBoxPage extends StatelessWidget {
       ],
     );
   }
+
+  static Widget _fitDemo(BoxFit fit, Color color, Widget child) => Container(
+        width: 260,
+        height: 70,
+        color: color,
+        alignment: Alignment.center,
+        child: FittedBox(fit: fit, child: child),
+      );
 
   static Widget _case(String label, Widget demo) => Padding(
         padding: const EdgeInsets.only(bottom: 14),
